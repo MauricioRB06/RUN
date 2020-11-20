@@ -5,6 +5,8 @@ import pygame
 import sys
 import random
 
+#comentario de prueba
+
 #Constantes
 ANCHO = 1024
 ALTO = 768
