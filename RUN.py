@@ -4,6 +4,7 @@
 import pygame
 import sys
 import random
+from random import choice 
 
 #Constantes
 ANCHO = 1024
@@ -12,13 +13,22 @@ color_rojo = (255,0,0)
 color_negro = (0,0,0)
 color_azul = (0,0,255)
 
+#Carriles 
+carril_1=250
+carril_2=400
+carril_3=650
+carril_4=900
+carriles=[carril_1,carril_2,carril_3,carril_4]
+
 #jugador
 jugador_size = 50
 jugador_pos = [ANCHO / 2, ALTO - jugador_size * 2]
 
 #Enemigo(s)
-enemigo_size = 50
-enemigo_pos = [random.randint(0,ANCHO - enemigo_size),0]
+enemigo_size = 100
+enemigo_pos = [choice(carriles),0]
+
+#random.randint(0,ANCHO - enemigo_size)
 
 #ventana
 ventana = pygame.display.set_mode((ANCHO,ALTO))
@@ -56,12 +66,20 @@ while not game_over:
 	if enemigo_pos[1] >= 0 and enemigo_pos[1] < ALTO:
 		enemigo_pos[1] += 20
 	else:
-		enemigo_pos[0] = random.randint(0,ANCHO - enemigo_size)
+		enemigo_pos[0] = int(choice(carriles))
 		enemigo_pos[1] = 0
+
 	#Colisiones
 	if detectar_colision(jugador_pos,enemigo_pos):
 		game_over = True
 
+<<<<<<< HEAD
+=======
+	#Dibujar enemigo
+	pygame.draw.rect(ventana, color_azul ,(enemigo_pos[0],enemigo_pos[1],enemigo_size, enemigo_size))
+	
+
+>>>>>>> d5f5953c8ba5d765b3b2f3fa7ccb45f18587075e
 	#Dibujar jugador
 	pygame.draw.rect(ventana, color_rojo,
 			(jugador_pos[0],jugador_pos[1],
