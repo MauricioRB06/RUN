@@ -1,8 +1,9 @@
 # Proyecto RUN
-# Pygame [ https://www.pygame.org/docs/ref/key.html ]
+# Pygame [ https://www.pygame.org/docs/ ]
 
 import pygame
 import sys
+import random
 from random import choice 
 
 #Constantes
