@@ -5,8 +5,6 @@ import pygame
 import sys
 import random
 
-#comentario de prueba
-
 #Constantes
 ANCHO = 1024
 ALTO = 768
@@ -64,13 +62,15 @@ while not game_over:
 	if detectar_colision(jugador_pos,enemigo_pos):
 		game_over = True
 
-	#Dibujar enemigo
-	pygame.draw.rect(ventana, color_azul,
-			(enemigo_pos[0],enemigo_pos[1],
-			enemigo_size, enemigo_size))
 	#Dibujar jugador
 	pygame.draw.rect(ventana, color_rojo,
 			(jugador_pos[0],jugador_pos[1],
 			jugador_size,jugador_size))
+
+		#Dibujar enemigo
+	pygame.draw.rect(ventana, color_azul,
+			(enemigo_pos[0],enemigo_pos[1],
+			enemigo_size, enemigo_size))
+
 	clock.tick(30)
 	pygame.display.update()
