@@ -73,13 +73,9 @@ while not game_over:
 	if detectar_colision(jugador_pos,enemigo_pos):
 		game_over = True
 
-<<<<<<< HEAD
-=======
 	#Dibujar enemigo
 	pygame.draw.rect(ventana, color_azul ,(enemigo_pos[0],enemigo_pos[1],enemigo_size, enemigo_size))
 	
-
->>>>>>> d5f5953c8ba5d765b3b2f3fa7ccb45f18587075e
 	#Dibujar jugador
 	pygame.draw.rect(ventana, color_rojo,
 			(jugador_pos[0],jugador_pos[1],
