@@ -1,8 +1,7 @@
 # Proyecto RUN
 # Pygame [ https://www.pygame.org/docs/ref/key.html ]
 
-import pygame
-import sys
+import pygame, sys
 import random
 from random import choice 
 
