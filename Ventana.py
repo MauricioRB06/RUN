@@ -1,10 +1,20 @@
-# Proyecto RUN
+# Proyecto R.U.N
 # Pygame [ https://www.pygame.org/docs/ ]
-# 
-# Programadores: 
-#
-#
-#
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# 													  #
+#	   Proyecto Final Pogramacion de Computadores     #
+#													  #
+#	   Universidad Nacional de Colombia - 2020 II     #
+#	       Docente: Juan Diego Escobar Mejia          #
+#	                 Programadores: 			      #
+# 													  #
+#	 Mauricio Rodriguez Becerra  - Ing. Mecatronica   #
+#	 Laura Alejandra Paez Daza   - Ing. Mecatronica   #
+#	 Alejandro Mendivelso Torres - Ing. Mecatronica   #
+#	 Juan Esteban Flechas Rincon - Ing. Electronica   #
+#												      #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 import pygame, sys
 import random
@@ -162,7 +172,7 @@ while game:
 
 	colision = pygame.sprite.spritecollide(Jugador,enemigos,False)
 	if colision:
-		sys.exit()
+		enemigo_1.kill()
 	elif enemigo_1.rect.top > H:
 		enemigo_1.kill()
 	elif enemigo_1.rect.top > H:
