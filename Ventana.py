@@ -160,7 +160,7 @@ game = True
 while game:
 
 	for event in pygame.event.get():
-		print(event)
+		#print(event)
 		if event.type == pygame.QUIT:
 			sys.exit()
 
