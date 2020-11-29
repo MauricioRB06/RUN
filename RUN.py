@@ -127,7 +127,7 @@ while not game_over:
 			jugador_size,jugador_size))
 
 	#Dibujar galon gasolina
-	gas = pygame.image.load('Pixel_Art/Gas.png')
+	gas = pygame.image.load('Pixel_Art/Items/Gas.png')
 	ventana.blit(gas,(galon_pos[0],galon_pos[1]))
 
 	"""pygame.draw.rect(ventana, color_verde,

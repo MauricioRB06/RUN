@@ -9,6 +9,8 @@
 #	       Docente: Juan Diego Escobar Mejia          #
 #	                 Programadores: 			      #
 # 													  #
+# 			       Lenguaje:  Python		     	  #
+# 													  #
 #	 Mauricio Rodriguez Becerra  - Ing. Mecatronica   #
 #	 Laura Alejandra Paez Daza   - Ing. Mecatronica   #
 #	 Alejandro Mendivelso Torres - Ing. Mecatronica   #
