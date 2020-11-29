@@ -114,7 +114,7 @@ while not game_over:
 
 	if recarga_gasolina(jugador_pos):
 		if gasolina<=90:
-			gasolina+=10
+			gasolina+=15
 		else: 
 			gasolina+=100-gasolina		
 
@@ -127,7 +127,7 @@ while not game_over:
 			jugador_size,jugador_size))
 
 	#Dibujar galon gasolina
-	gas = pygame.image.load('Pixel_Art/Gas.png')
+	gas = pygame.image.load('Pixel_Art/Items/Gas.png')
 	ventana.blit(gas,(galon_pos[0],galon_pos[1]))
 
 	"""pygame.draw.rect(ventana, color_verde,
@@ -143,6 +143,6 @@ while not game_over:
 	icono_gas = pygame.image.load('Pixel_Art/Gas_icono.png')
 	ventana.blit(icono_gas,(10,5))	
 	bGasolina(gasolina)	
-	gasolina-=0.04
+	gasolina-=0.08
 	clock.tick(30)
 	pygame.display.update()
