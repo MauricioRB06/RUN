@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-#
-# autor: Hugo Ruscitti
-# web: www.losersjuegos.com.ar
-# licencia: GPL 2
-
 import random
 import pygame
 from pygame.locals import *

@@ -154,7 +154,7 @@ while not game_over:
 			enemigo_size, enemigo_size))
 
 
-	icono_gas = pygame.image.load('Pixel_Art/Gas_icono.png')
+	icono_gas = pygame.image.load('Pixel_Art/Items/Gas.png')
 	ventana.blit(icono_gas,(10,5))	
 	bGasolina(gasolina)	
 	gasolina-=0.04
