@@ -1,10 +1,22 @@
-# Proyecto RUN
+# Proyecto R.U.N
 # Pygame [ https://www.pygame.org/docs/ ]
-# 
-# Programadores: 
-#
-#
-#
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# 													  #
+#	   Proyecto Final Pogramacion de Computadores     #
+#													  #
+#	   Universidad Nacional de Colombia - 2020 II     #
+#	       Docente: Juan Diego Escobar Mejia          #
+#	                 Programadores: 			      #
+# 													  #
+# 			       Lenguaje:  Python		     	  #
+# 													  #
+#	 Mauricio Rodriguez Becerra  - Ing. Mecatronica   #
+#	 Laura Alejandra Paez Daza   - Ing. Mecatronica   #
+#	 Alejandro Mendivelso Torres - Ing. Mecatronica   #
+#	 Juan Esteban Flechas Rincon - Ing. Electronica   #
+#												      #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 import pygame, sys
 import random
@@ -67,14 +79,14 @@ class Enemy(pygame.sprite.Sprite):
 		enemigos = [ enemy_1, enemy_2, enemy_3, enemy_4, enemy_5, enemy_6 ]
 
 		# Posiciones de los carriles
-		carril_1 = ( 260,0 )
-		carril_2 = ( 350,0 )
-		carril_3 = ( 465,0 )
-		carril_4 = ( 555,0 )
-		carril_5 = ( 667,0 )
-		carril_6 = ( 757,0 )
-		carril_7 = ( 870,0 )
-		carril_8 = ( 960,0 )
+		carril_1 = ( 260,10 )
+		carril_2 = ( 350,50 )
+		carril_3 = ( 465,100 )
+		carril_4 = ( 555,150 )
+		carril_5 = ( 667,200 )
+		carril_6 = ( 757,250 )
+		carril_7 = ( 870,300 )
+		carril_8 = ( 960,350 )
 		carriles = [ carril_1, carril_2, carril_3, carril_4, carril_5, carril_6, carril_7, carril_8]
 
 		# Heredamos del constructor de Sprite
@@ -148,7 +160,7 @@ game = True
 while game:
 
 	for event in pygame.event.get():
-		print(event)
+		#print(event)
 		if event.type == pygame.QUIT:
 			sys.exit()
 
@@ -162,7 +174,7 @@ while game:
 
 	colision = pygame.sprite.spritecollide(Jugador,enemigos,False)
 	if colision:
-		sys.exit()
+		enemigo_1.kill()
 	elif enemigo_1.rect.top > H:
 		enemigo_1.kill()
 	elif enemigo_1.rect.top > H:

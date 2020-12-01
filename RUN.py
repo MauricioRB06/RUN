@@ -6,6 +6,8 @@ import sys
 import random
 from random import choice 
 
+pygame.font.init()
+
 #Constantes
 ANCHO = 1024
 ALTO = 768
@@ -55,6 +57,13 @@ def detectar_colision(jugador_pos,enemigo_pos):
 			return True
 		return False
 
+def puntaje_en_pantalla(lugar, texto, size, x, y):
+    font = pygame.font.SysFont("serif", size)
+    texto_surface = font.render(texto, True, color_blanco)
+    texto_rect = texto_surface.get_rect()
+    texto_rect.midtop=(x,y)
+    lugar.blit(texto_surface, texto_rect)
+
 def bGasolina(gasolina):
 	x=50
 	y=9.5
@@ -88,6 +97,11 @@ while not game_over:
 
 			jugador_pos[0] = x
 	ventana.fill(color_negro)
+
+	if enemigo_pos[1]>ALTO:
+		puntaje+=1
+		if game_over==True:
+			puntaje_final=puntaje
 
 	if gasolina<=0:
 		game_over=True
@@ -127,7 +141,7 @@ while not game_over:
 			jugador_size,jugador_size))
 
 	#Dibujar galon gasolina
-	gas = pygame.image.load('Pixel_Art/Gas.png')
+	gas = pygame.image.load('Pixel_Art/Items/Gas.png')
 	ventana.blit(gas,(galon_pos[0],galon_pos[1]))
 
 	"""pygame.draw.rect(ventana, color_verde,
@@ -140,9 +154,10 @@ while not game_over:
 			enemigo_size, enemigo_size))
 
 
-	icono_gas = pygame.image.load('Pixel_Art/Gas_icono.png')
+	icono_gas = pygame.image.load('Pixel_Art/Items/Gas.png')
 	ventana.blit(icono_gas,(10,5))	
 	bGasolina(gasolina)	
 	gasolina-=0.04
+	puntaje_en_pantalla (ventana, str(puntaje), 50, ANCHO/2, 10)
 	clock.tick(30)
 	pygame.display.update()
