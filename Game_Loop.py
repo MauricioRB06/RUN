@@ -112,6 +112,17 @@ def game_loop(car): # Blucle del juego
 			else: 
 				remaining_fuel += 219-remaining_fuel
 
+		win_score = pygame.sprite.spritecollide(goal,enemies,False,False) # si los enemigos colisionan con el sprite de la meta de puntuacion, generan puntos cada vez que colisionen
+		if win_score:                                                     # entonces entre mas grande el enemigo ( tamaño del rectangulo ), colisiona por mas tiempo y genera mas puntos
+			if car == 1:                                                  # ya que la dificultad se ajusta en la clase dependiendo del carro que seleccione el jugador
+				score += 1                                                # los autos 1 y 2 son los mas rapidos para moverse entonces generan menos puntos ya que es mas facil esquivar
+			elif car == 2:                                                # y los autos 3 y 4 se mueven mas lento, por lo tanto generan mas puntos ya que es mas dificil esquivar
+				score += 1
+			elif car == 3:
+				score += 2
+			else:
+				score += 2
+
 		colision = pygame.sprite.spritecollide(player,enemies,False) # creamos la variable colision que sera True si se cumplen las condiciones
 		if colision:   # Si se produce la colision entre el sprite del jugador y un sprite del grupo enemigos, llamamos a la animacion busted y a la funcion game_over
 			sfx_low_fuel.stop() 
@@ -130,17 +141,6 @@ def game_loop(car): # Blucle del juego
 		enemies.update()
 		score_goal.update()
 		police_siren.update()
-
-		win_score = pygame.sprite.spritecollide(goal,enemies,False,False) # si los enemigos colisionan con el sprite de la meta de puntuacion, generan puntos cada vez que colisionen
-		if win_score:                                                     # entonces entre mas grande el enemigo ( tamaño del rectangulo ), colisiona por mas tiempo y genera mas puntos
-			if car == 1:                                                  # ya que la dificultad se ajusta en la clase dependiendo del carro que seleccione el jugador
-				score += 1                                                # los autos 1 y 2 son los mas rapidos para moverse entonces generan menos puntos ya que es mas facil esquivar
-			elif car == 2:                                                # y los autos 3 y 4 se mueven mas lento, por lo tanto generan mas puntos ya que es mas dificil esquivar
-				score += 1
-			elif car == 3:
-				score += 2
-			else:
-				score += 2
 		
 		players.draw(SCREEN)  # Ya que actualizamos los prites y comprobamos las colisiones ahora dibujaremos los sprites en pantalla
 		enemies.draw(SCREEN)

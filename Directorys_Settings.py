@@ -44,6 +44,11 @@ f_sfx = join(sounds_folder,'SFX')                 # Creamos la ruta para la subc
 f_pause = join(menu_subfolder,'Pause')            # Creamos la ruta para la subcarpeta la animacion pausa
 f_gameover = join(menu_subfolder,'Game_Over')     # Creamos la ruta para la subcarpeta la animacion game over
 f_coin = join(menu_subfolder,'Insert_Coin')       # Creamos la ruta para la subcarpeta de la animacion insert coin
+f_load = join(menu_subfolder,'Load_Game')  
+f_htp = join(menu_subfolder,'How_To_Play')  
+f_hs = join(menu_subfolder,'High_Score')  
+f_credits = join(menu_subfolder,'Credits')  
+f_vselect = join(menu_subfolder,'Vehicle_Select')  
 
 # ----------------------------------------- Creacion de Pantalla / Reloj / FPS / Icono y Titulo --------------------
 
@@ -59,8 +64,8 @@ set_icon(load(join(images_folder,'icon.png')).convert_alpha())  # set_icon() cam
 img_cursor = scale(load(join(menu_subfolder,'Cursor.png')).convert_alpha(),(50,47))  # scale() nos ayuda a trasformar las dimensiones de una imagen, ingresamos el archivo y el nuevo tamaño en (x,y)
 background_go = load(join(f_backgrounds,'Game_Over.png')).convert_alpha()            # load() crear un objeto tipo Surface() con las mismas caracteristicas del archivo que indicamos como entrada
 background_menu = load(join(f_backgrounds,'Menu.png')).convert_alpha()               # nos pide ingresar la ruta y el nombre de la imagen, junto al tipo de formato ( en este caso .PNG )
-background_car = load(join(f_backgrounds,'Menu.png')).convert_alpha()                # el metodo convert() y conver_alpha() convierte la imagen a un formato interno adecuado para blitting
-background_load = load(join(f_backgrounds,'Menu.png')).convert_alpha()               # usamos conver_alpha() para que la superficie respete la trasnparencia, ya que si usamos unicamente el metodo convert
+background_car = load(join(f_backgrounds,'Vehicle_Select.png')).convert_alpha()                # el metodo convert() y conver_alpha() convierte la imagen a un formato interno adecuado para blitting
+background_load = load(join(f_backgrounds,'Loading.png')).convert_alpha()               # usamos conver_alpha() para que la superficie respete la trasnparencia, ya que si usamos unicamente el metodo convert
 background_h_s = load(join(f_backgrounds,'High_Score.png')).convert_alpha()          # los pixeles alpha seran trasnformados en color negro, lo cual en este caso no nos coviene
 background_ht_play = load(join(f_backgrounds,'How_To_Play.png')).convert_alpha()     # podemos expresar la ruta mediante un string, en este caso las variables que usamos para los directorios
 background_credits = load(join(f_backgrounds,'Credits.png')).convert_alpha()         # lo que contienen es un string con la ruta, asi que para no tener que escribirla manualmente cada vez que
@@ -71,12 +76,14 @@ arcade_game = load(join(f_backgrounds,'Arcade_In_Game.png')).convert_alpha()    
 arcade_pause = load(join(f_backgrounds,'Arcade_pause.png')).convert_alpha()          # ya que si dejamos las imagenes tal cual, seran mas complicadas de procesar ya que se tendria que hacer, pixel a pixel
 arcade_game_over = load(join(f_backgrounds,'Arcade_Game_Over.png')).convert_alpha()  # lo que repercutiria negativamente en la ejecicion, causando que si son muchas imagenes, el juego se ponga lento
 arcade_lose = load(join(f_backgrounds,'Arcade_Lose.png')).convert_alpha()            
-img_pause = load(join(f_pause,'Image_pause.png')).convert_alpha()                    
+img_pause = load(join(f_pause,'Image_pause.png')).convert_alpha()
+img_load = load(join(f_load,'loading.png')).convert_alpha()           
 img_crash = load(join(f_gameover,'Crash.png')).convert_alpha()                       
 img_busted = load(join(f_gameover,'Busted.png')).convert_alpha()                     
 img_go_1 = load(join(f_gameover,'Your_Busted.png')).convert_alpha()                  
 img_go_0 = load(join(f_gameover,'Your_Crash.png')).convert_alpha()                   
-img_low_fuel = load(join(f_items,'Low_Fuel.png')).convert_alpha()                    
+img_low_fuel = load(join(f_items,'Low_Fuel.png')).convert_alpha()   
+img_cars = load(join(f_vselect,'Select_Car.png')).convert_alpha()                   
 
 # ----------------------------------------- Creacion de efectos de sonidos ----------------------------------------- 
 
