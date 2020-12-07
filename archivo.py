@@ -1,6 +1,6 @@
 from io import open
 import operator
-from dire import clients
+
 
 # aca deberia ir el diccionario con las variables nombres y score, el nombre como clave y score como valor, cada vez que termina una partida se agrega al diccionario
 def save_game(name,score):
@@ -10,6 +10,7 @@ def order():
 
 	# aca se ordena el diccionario por valor de mayor a menor
 	clients_sort = sorted(clients.items(), key=operator.itemgetter(1), reverse=True)
+	
 
 	# creamos el archivo
 	client_archivo= open("High_Scores.txt",'a')
