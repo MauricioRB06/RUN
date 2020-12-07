@@ -68,7 +68,7 @@ def game_loop(car): # Blucle del juego
 	music.play(loops=-1)  
 	sfx_low_fuel.set_volume(0.05) # El metodo set_volume() nos ayuda a reducir o aumentar el volumen de los sonidos, entre 0 y 1
 	score = 0                     # Iniciamos el puntaje en 0
-	remaining_fuel= 5           # Creamos la cantidad inicial de combustible que tendra el jugador
+	remaining_fuel= 219           # Creamos la cantidad inicial de combustible que tendra el jugador
 	mov_y = 0                     # Variable para mover el fondo ( la imagen del mapa en este caso )
 
 	while game:
@@ -188,7 +188,7 @@ def game_loop(car): # Blucle del juego
 			pygame.draw.rect(SCREEN,(100,200,100),(418, 941, remaining_fuel, 15))  
 		
 		remaining_fuel -= 0.06  # reducimos la gasolina al final de cada ejecución
-		score_print(SCREEN,str(score).zfill(10),540,900,(0,0,0),20)  # Una vez impresas todas las imagenes, imprimimos el puntaje para que quede encima de todas las capas y sea visible
+		score_print(str(score).zfill(10),540,900,(0,0,0),20)  # Una vez impresas todas las imagenes, imprimimos el puntaje para que quede encima de todas las capas y sea visible
 		mov_y += 15
 		pygame.display.update()
 	return score # al terminar el juego y que game = False , entonces como final de la funcion game_loop() retornamos el puntaje que nos dio el juego para usarlo

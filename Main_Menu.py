@@ -33,6 +33,7 @@ from time import sleep
 from random import randint
 from Directorys_Settings import SCREEN, CLOCK, FPS, W, H, f_music, f_coin, sfx_button_click, img_cars, arcade_menu, img_cursor, img_credits, f_backgrounds, sfx_perseo, sfx_blood_tombos, sfx_powerup
 from Directorys_Settings import background_menu, background_load, arcade_game,img_load, background_car, background_h_s,background_ht_play, img_htp, sfx_blood_oldwoman, sfx_blood_porky, img_hs, f_vfx
+from Game_functions import hg_score, score_print
 import Game_Loop  # Importamos el módulo [ Game_Loop ]
 
 # ----------------------------------------- Inicializar Pygame y Pygame Mixer ------------------------------------------------------------------------------------
@@ -81,12 +82,13 @@ def main_menu():  # Funcion del menu principal
                     if select != 0:
                         sleep(1)
                         load_game()
-                        result = Game_Loop.game_loop(select)
+                        final_score = Game_Loop.game_loop(select)
                         load_game()
                         music.load(join(f_music,'Menu_Music.ogg'))
                         music.set_volume(0.3)
                         music.play(loops=-1)
-                        print(result)# print de prueba 
+                        save = open('High_Scores.txt','a')
+                        save.write('\n'+ str(final_score))
                 if button_hs.collidepoint(mouse.get_pos()):          # revisa si el click colisiono con el boton high score
                     sfx_button_click.play()
                     high_score()                                     # llamamos a la funcion con el menu High Score                     
@@ -212,6 +214,7 @@ def vehicle_select(): # Funcion para mostrar pantalla de selccion de vehiculo
     return vechicle                       
 
 def high_score(): # Funcion para mostrar el puntaje mas alto logrado
+    score_1,score_2,score_3 = hg_score()
     hs = True
     coin = 1                                 
     x_mov = 0
@@ -240,6 +243,12 @@ def high_score(): # Funcion para mostrar el puntaje mas alto logrado
 
         SCREEN.blit(img_hs,(0,0))
         print_buttons(button_back,'BACK',menu_font)
+        score_print(score_1.zfill(10),650,379,(0,0,0),50)
+        score_print(score_1.zfill(10),650,375,(255,255,255),50)
+        score_print(score_2.zfill(10),650,484,(0,0,0),50)
+        score_print(score_2.zfill(10),650,480,(255,255,255),50)
+        score_print(score_3.zfill(10),650,584,(0,0,0),50)
+        score_print(score_3.zfill(10),650,580,(255,255,255),50)
         SCREEN.blit(scale(load(join(f_vfx,f'Bongo_Cat_{bongo}.png')).convert_alpha(),(198,198)),(650,110))
         SCREEN.blit(img_cursor,(mouse_pos[0],mouse_pos[1]))
         SCREEN.blit(arcade_menu,(0,0))

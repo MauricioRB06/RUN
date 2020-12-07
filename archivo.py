@@ -3,7 +3,6 @@ import operator
 from dire import clients
 
 # aca deberia ir el diccionario con las variables nombres y score, el nombre como clave y score como valor, cada vez que termina una partida se agrega al diccionario
-
 def save_game(name,score):
 	clients[str(name)] = score
 

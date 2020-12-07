@@ -38,15 +38,20 @@ from Directorys_Settings import arcade_pause,arcade_game_over,arcade_lose,img_pa
 
 # ----------------------------------------- Funciones = Imprimir texto / Pausar / Choque / Arresto / Game_Over -----------------------------------------
 
-def score_print(SCREEN,score,x,y,color,size): # Funcion para imprimir la puntuación en pantalla
+def score_print(score,x,y,color,size): # Funcion para imprimir la puntuación en pantalla
 	score_font = Font('04B30.ttf', size)          # Creamos un objeto de la clase Font() que usaremos como fuente para imprimirla en pantalla, usamos el archivo .ttf ubicado en la carpeta raiz y un tamaño
 	surface = score_font.render(score,True,color) # Creamos una superficie para poner el texto y mostrarlo en pantalla, especificamos el texto, True para usar anti-aliased y el color del texto
 	size_text = surface.get_rect()                # Creamos el rectangulo en base al tamaño final de la superficie ( que cambiara cada vez que cambie el texto )
 	size_text.center = (x,y)                      # Centramos el rectangulo en la posicion deseada de la pantalla
 	SCREEN.blit(surface,size_text)                # en la ventana SCREEN con el metodo .blit() dibujamos una superficie ( el texto ) del tamaño del texto final de esta ( el rectangulo)
 	
-def hg_score(final_score): # Funcion para guardar el puntaje maximo logrado
-	pass
+def hg_score(): # Funcion para guardar el puntaje maximo logrado
+	f = open("High_Scores.txt", "r")
+	a = f.readline()
+	b = f.readline()
+	c = f.readline()
+	f.close()
+	return a.strip(),b.strip(),c.strip()
 
 def pause(): # Funcion para pausar el juego
 	pause = True
@@ -146,7 +151,7 @@ def game_over(why,score): # Funcion para llamar a la animacion y "menu" game ove
 			SCREEN.blit(load(join(f_vfx,f'Smoke_{fps_8}.png')).convert_alpha(),(510,450))
 			SCREEN.blit(load(join(f_vfx,f'Fire_02_{fps_4}.png')).convert_alpha(),(415,570))
 
-		score_print(SCREEN,str(score).zfill(10),720,180,(236,219,83),30)  # el metodo .zfill() nos ayuda a rellenar con 0 un texto
+		score_print(str(score).zfill(10),720,180,(236,219,83),30)  # el metodo .zfill() nos ayuda a rellenar con 0 un texto
 		SCREEN.blit(arcade_game_over,(0,0))
 		fps_4 += 1
 		fps_8 += 1
@@ -157,12 +162,3 @@ def game_over(why,score): # Funcion para llamar a la animacion y "menu" game ove
 			fps_8 = 1
 		display.update()
 	SCREEN.fill((0,0,0)) # Al salir del game over, para que no se muestre como quedo la posicion de los enemigos y demas cuando se pauso el juego al perder, pintamos todo de negro y salimos
-
-
-def puntaje ():
-
-    Best = [5,4,4,9,8,10,5000]
-
-    print(max([int(num) for num in Best]))
-
-puntaje()
