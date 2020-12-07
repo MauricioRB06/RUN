@@ -28,7 +28,7 @@ from pygame.image import load
 from pygame.mixer import Sound
 from os.path import join
 from random import choice, randint # Importamos las funciones que usaremos del módulo [ random ]
- # Importamos las variables y directorios que usaremos del módulo [ Directorys_Settings ]
+# Importamos las variables y directorios que usaremos del módulo [ Directorys_Settings ]
 from Directorys_Settings import H, f_vehicles, f_enemies, f_items, f_vfx, f_sfx, sfx_powerup, sfx_blood_tombos
 from Directorys_Settings import sfx_blood_porky,sfx_blood_oldwoman, img_bonus_1, img_bonus_2,img_bonus_3
 
