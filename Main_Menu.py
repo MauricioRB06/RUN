@@ -156,10 +156,10 @@ def vehicle_select(): # Funcion para mostrar pantalla de selccion de vehiculo
     x_mov = 0
     fps_control = 0 
     button_back = Rect(400,690,192,42)
-    button_car1 = Rect(80,600,170,30) 
-    button_car2 = Rect(290,600,170,30) 
-    button_car3 = Rect(510,600,170,30) 
-    button_car4 = Rect(720,600,170,30)  
+    button_car1 = Rect(100,600,170,30) 
+    button_car2 = Rect(310,600,170,30) 
+    button_car3 = Rect(520,600,170,30) 
+    button_car4 = Rect(730,600,170,30)  
     while select:
         CLOCK.tick(60)
         mouse_pos = mouse.get_pos()
