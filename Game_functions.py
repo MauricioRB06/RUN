@@ -161,3 +161,12 @@ def game_over(why,score): # Funcion para llamar a la animacion y "menu" game ove
 			fps_8 = 1
 		display.update()
 	SCREEN.fill((0,0,0)) # Al salir del game over, para que no se muestre como quedo la posicion de los enemigos y demas cuando se pauso el juego al perder, pintamos todo de negro y salimos
+
+
+def puntaje ():
+
+    Best = [5,4,4,9,8,10,5000]
+
+    print(max([int(num) for num in Best]))
+
+puntaje()
