@@ -46,13 +46,31 @@ def score_print(score,x,y,color,size): # Funcion para imprimir la puntuación en
 	SCREEN.blit(surface,size_text)                # en la ventana SCREEN con el metodo .blit() dibujamos una superficie ( el texto ) del tamaño del texto final de esta ( el rectangulo)
 	
 def hg_score(): # Funcion para guardar el puntaje maximo logrado
-	f = open("High_Scores.txt", "r")
-	a = f.readline()
-	b = f.readline()
-	c = f.readline()
-	f.close()
-	return a.strip(),b.strip(),c.strip()
+	scores = open("High_Scores.user", "r")
+	score_1 = scores.readline()
+	score_2 = scores.readline()
+	score_3 = scores.readline()
+	scores.close()
+	return score_1.strip(),score_2.strip(),score_3.strip()
 
+def order_score():
+
+	order = []
+
+	with open('High_Scores.user','r') as scores: 
+		lista = [score.strip() for score in scores]
+	scores.close()
+
+	for i in range(0,len(lista)):
+		order.append(int(lista[i]))
+
+	order.sort(reverse=True)
+
+	with open('High_Scores.user', 'w') as scores:
+		for linea in range(0, len(order)):
+			scores.write("%s \n"% (order[linea]))
+	scores.close()
+			
 def pause(): # Funcion para pausar el juego
 	pause = True
 	while pause:

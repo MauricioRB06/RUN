@@ -28,7 +28,9 @@ from pygame.image import load
 from pygame.mixer import Sound
 from os.path import join
 from random import choice, randint # Importamos las funciones que usaremos del módulo [ random ]
-from Directorys_Settings import H, f_vehicles, f_enemies, f_items, f_vfx, f_sfx, sfx_powerup # Importamos las variables y directorios que usaremos del módulo [ Directorys_Settings ]
+ # Importamos las variables y directorios que usaremos del módulo [ Directorys_Settings ]
+from Directorys_Settings import H, f_vehicles, f_enemies, f_items, f_vfx, f_sfx, sfx_powerup, sfx_blood_tombos
+from Directorys_Settings import sfx_blood_porky,sfx_blood_oldwoman, img_bonus_1, img_bonus_2,img_bonus_3
 
 # ----------------------------------------- Clases = Jugador / Enemigo / Items / Animaciones -----------------------------------------
 
@@ -135,22 +137,15 @@ class Police_siren(Sprite): # Clase para Animacion sirena de policia
 		self.image = choice(self.sirens)
 class Bonus(Sprite):  # Clase Objeto bonus
 
-	sfx_bonus_1 = Sound(join(f_sfx,'Duque.ogg'))
-	bonus_1 = load(join(f_items,'Bonus_1.png')).convert_alpha()
-	sfx_bonus_2 = Sound(join(f_sfx,'Gloria.ogg'))
-	bonus_2 = load(join(f_items,'Bonus_2.png')).convert_alpha()
-	sfx_bonus_3 = Sound(join(f_sfx,'Tombos.ogg'))
-	bonus_3 = load(join(f_items,'Bonus_3.png')).convert_alpha()
-
 	def __init__(self):
 		super().__init__() 
 		self.option = randint(1,3)
 		if self.option  == 1:
-			self.image = self.bonus_1
+			self.image = img_bonus_1
 		elif self.option  == 2:
-			self.image = self.bonus_2
+			self.image = img_bonus_2
 		else:
-			self.image = self.bonus_3
+			self.image = img_bonus_3
 		self.rect = self.image.get_rect()
 		self.rect.center = (randint(145,876),-4000) # Centramos el rectangulo dentro de la zona de los carriles en X y a -3000 pixeles del top de la pantalla en Y
 		self.speed = 8
@@ -160,33 +155,33 @@ class Bonus(Sprite):  # Clase Objeto bonus
 		if self.rect.top > ( H+4000 ):
 			self.option = randint(1,3)
 			if self.option  == 1:
-				self.image = self.bonus_1
+				self.image = img_bonus_1
 				self.rect = self.image.get_rect()
 			elif self.option  == 2:
-				self.image = self.bonus_2
+				self.image = img_bonus_2
 				self.rect = self.image.get_rect()
 			else:
-				self.image = self.bonus_3
+				self.image = img_bonus_3
 				self.rect = self.image.get_rect()
 			self.rect.center = (randint(145,876),-4000)
 
 	def kill_bonus(self):
 		if self.option == 1:
-			self.sfx_bonus_1.play()
+			sfx_blood_porky.play()
 		elif self.option == 2:
-			self.sfx_bonus_2.play()
+			sfx_blood_oldwoman.play()
 		else:
-			self.sfx_bonus_3.play()
+			sfx_blood_tombos.play()
 		bonus_kill = self.option
 		self.option = randint(1,3)
 		if self.option  == 1:
-			self.image = self.bonus_1
+			self.image = img_bonus_1
 			self.rect = self.image.get_rect()
 		elif self.option  == 2:
-			self.image = self.bonus_2
+			self.image = img_bonus_2
 			self.rect = self.image.get_rect()
 		else:
-			self.image = self.bonus_3
+			self.image = img_bonus_3
 			self.rect = self.image.get_rect()
 		self.rect.center = (randint(145,876),-8000)
 		return bonus_kill
@@ -208,7 +203,7 @@ class Blood(Sprite): # Clase para Animacion Sangre
 
 	def update(self):
 
-		blood_speed = 6		 # Podemos controlar la velocidad de reproduccion de la animacion
+		blood_speed = 6		     # Podemos controlar la velocidad de reproduccion de la animacion
 								 # Actualizar la animación
 		self.counter += 1        # Agregamos un valor a la cantidad de reproducciones de la imagen
 		self.center = (500,500)  # Centramos la animacion, en donde estaba el sprite colisionado  

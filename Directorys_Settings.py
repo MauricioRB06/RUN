@@ -85,7 +85,10 @@ img_low_fuel = load(join(f_items,'Low_Fuel.png')).convert_alpha()
 img_cars = load(join(f_vselect,'Select_Car.png')).convert_alpha()
 img_credits = load(join(f_credits,'Credits_Image.png')).convert_alpha()
 img_htp = load(join(f_htp,'How_To_Play.png')).convert_alpha()     
-img_hs = load(join(f_hs,'Best_Scores.png')).convert_alpha() 
+img_hs = load(join(f_hs,'Best_Scores.png')).convert_alpha()
+img_bonus_1 = load(join(f_items,'Bonus_1.png')).convert_alpha()
+img_bonus_2 = load(join(f_items,'Bonus_2.png')).convert_alpha()
+img_bonus_3 = load(join(f_items,'Bonus_3.png')).convert_alpha() 
 
 # ----------------------------------------- Creacion de efectos de sonidos ----------------------------------------- 
 

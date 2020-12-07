@@ -33,7 +33,7 @@ from time import sleep
 from random import randint
 from Directorys_Settings import SCREEN, CLOCK, FPS, W, H, f_music, f_coin, sfx_button_click, img_cars, arcade_menu, img_cursor, img_credits, f_backgrounds, sfx_perseo, sfx_blood_tombos, sfx_powerup
 from Directorys_Settings import background_menu, background_load, arcade_game,img_load, background_car, background_h_s,background_ht_play, img_htp, sfx_blood_oldwoman, sfx_blood_porky, img_hs, f_vfx
-from Game_functions import hg_score, score_print
+from Game_functions import hg_score, score_print, order_score
 import Game_Loop  # Importamos el módulo [ Game_Loop ]
 
 # ----------------------------------------- Inicializar Pygame y Pygame Mixer ------------------------------------------------------------------------------------
@@ -43,7 +43,7 @@ menu_font = Font('04B30.ttf', 60)
 car_font = Font('04B30.ttf', 35)
 mouse.set_visible(0) # El metodo .set_visible() nos permite esconder el cursor de windows dentro de la ventana 0 = False / 1 = True
 game_on = True
-
+sfx_button_click.set_volume(0.5)
 # --------------------------- Funciones = cargar juego/ seleccionar auto / puntuacion mas alta / como jugar / creditos / menu principal / imprimir botones -------
 
 def print_buttons(button,name,font):  # Funcion para imprimir en pantalla los botones
@@ -67,7 +67,7 @@ def main_menu():  # Funcion del menu principal
     x_mov = 0
     fps_control = 0                           # variable para controlar la velocidad de la animacion insert_coin
     music.load(join(f_music,'Menu_Music.ogg'))
-    music.set_volume(0.3)
+    music.set_volume(0.15)
     music.play(loops=-1)
 
     while game_on:
@@ -85,10 +85,11 @@ def main_menu():  # Funcion del menu principal
                         final_score = Game_Loop.game_loop(select)
                         load_game()
                         music.load(join(f_music,'Menu_Music.ogg'))
-                        music.set_volume(0.3)
+                        music.set_volume(0.15)
                         music.play(loops=-1)
-                        save = open('High_Scores.txt','a')
-                        save.write('\n'+ str(final_score))
+                        save = open('High_Scores.user','a')
+                        save.write(str(final_score)+'\n')
+                        save.close()
                 if button_hs.collidepoint(mouse.get_pos()):          # revisa si el click colisiono con el boton high score
                     sfx_button_click.play()
                     high_score()                                     # llamamos a la funcion con el menu High Score                     
@@ -100,6 +101,7 @@ def main_menu():  # Funcion del menu principal
                     music.stop()
                     credits()
                     music.load(join(f_music,'Menu_Music.ogg'))
+                    music.set_volume(0.15)
                     music.play(loops=-1)                                        # llamamos a la funcion con el menu Credits
                 if button_exit.collidepoint(mouse.get_pos()):        # revisa si el click colisiono con el boton salir y cierra el sistema
                     sfx_button_click.play()
@@ -214,6 +216,8 @@ def vehicle_select(): # Funcion para mostrar pantalla de selccion de vehiculo
     return vechicle                       
 
 def high_score(): # Funcion para mostrar el puntaje mas alto logrado
+    save = open('High_Scores.user','a')
+    order_score()
     score_1,score_2,score_3 = hg_score()
     hs = True
     coin = 1                                 
@@ -269,6 +273,7 @@ def high_score(): # Funcion para mostrar el puntaje mas alto logrado
             coin = 1
             fps_control1 = 0  
         display.update()
+    save.close()
 
 def how_to_play(): # Funcion para mostrar la guia de como jugar y los controles
     htp = True
