@@ -30,8 +30,9 @@ from pygame.transform import scale
 from pygame.font import Font
 from os.path import join
 from time import sleep
-from Directorys_Settings import SCREEN, CLOCK, FPS, W, f_music, f_coin, sfx_button_click, img_cars, arcade_menu, img_cursor
-from Directorys_Settings import background_menu, background_load, arcade_game,img_load, background_car, background_h_s,background_ht_play, background_credits 
+from random import randint
+from Directorys_Settings import SCREEN, CLOCK, FPS, W, H, f_music, f_coin, sfx_button_click, img_cars, arcade_menu, img_cursor, img_credits, f_backgrounds, sfx_perseo, sfx_blood_tombos, sfx_powerup
+from Directorys_Settings import background_menu, background_load, arcade_game,img_load, background_car, background_h_s,background_ht_play, img_htp, sfx_blood_oldwoman, sfx_blood_porky, img_hs, f_vfx
 import Game_Loop  # Importamos el módulo [ Game_Loop ]
 
 # ----------------------------------------- Inicializar Pygame y Pygame Mixer ------------------------------------------------------------------------------------
@@ -44,12 +45,13 @@ game_on = True
 
 # --------------------------- Funciones = cargar juego/ seleccionar auto / puntuacion mas alta / como jugar / creditos / menu principal / imprimir botones -------
 
-def print_buttons(screen,button,name,font):  # Funcion para imprimir en pantalla los botones
+def print_buttons(button,name,font):  # Funcion para imprimir en pantalla los botones
     if button.collidepoint(mouse.get_pos()):           # si el mouse esta encima del boton
         text = font.render(name,True,(235,47,47)) # ponemos la letra de color rojo y mayuscula
         SCREEN.blit(text,(button.x + (button.width + 10 - text.get_width())/2,  # pintamos el texto en el centro del recuadro del boton
                       button.y + (button.height - 3 - text.get_height())/2 )) 
-    else:                                                          # si el mouse no esta encima del boton 
+    else:                                                     # si el mouse no esta encima del boton
+        draw.rect(SCREEN,(255,0,0),button,0)
         text = font.render(name.lower(),True,(245,245,245))   # ponemos la letra de color blanco y minuscula
         SCREEN.blit(text,(button.x + (button.width + 10 - text.get_width())/2, 
                       button.y + (button.height - 3 - text.get_height())/2 )) # pintamos el texto en el centro del recuadro del boton
@@ -65,7 +67,7 @@ def main_menu():  # Funcion del menu principal
     x_mov = 0
     fps_control = 0                           # variable para controlar la velocidad de la animacion insert_coin
     music.load(join(f_music,'Menu_Music.ogg'))
-    music.set_volume(0.7)
+    music.set_volume(0.4)
     music.play(loops=-1)
 
     while game_on:
@@ -83,6 +85,7 @@ def main_menu():  # Funcion del menu principal
                         result = Game_Loop.game_loop(select)
                         load_game()
                         music.load(join(f_music,'Menu_Music.ogg'))
+                        music.set_volume(0.4)
                         music.play(loops=-1)
                         print(result)# print de prueba 
                 if button_hs.collidepoint(mouse.get_pos()):          # revisa si el click colisiono con el boton high score
@@ -107,18 +110,18 @@ def main_menu():  # Funcion del menu principal
         if x_move < W:
             SCREEN.blit(background_menu,(x_move,70))
 
-        print_buttons(SCREEN,button_play,'PLAY',menu_font)         # Llamamos a la función print_buttons y le damos de parametro el rectangulo del boton correspondiente, y el texto que tendra el boton
-        print_buttons(SCREEN,button_hs,'HIGH SCORE',menu_font)
-        print_buttons(SCREEN,button_htp,'HOW TO PLAY',menu_font)
-        print_buttons(SCREEN,button_credits,'CREDITS',menu_font)
-        print_buttons(SCREEN,button_exit,'EXIT',menu_font)
+        print_buttons(button_play,'PLAY',menu_font)         # Llamamos a la función print_buttons y le damos de parametro el rectangulo del boton correspondiente, y el texto que tendra el boton
+        print_buttons(button_hs,'HIGH SCORE',menu_font)
+        print_buttons(button_htp,'HOW TO PLAY',menu_font)
+        print_buttons(button_credits,'CREDITS',menu_font)
+        print_buttons(button_exit,'EXIT',menu_font)
 
         SCREEN.blit(img_cursor,(mouse_pos[0],mouse_pos[1])) # Despues de que se creen las imagenes y justo abajo de la imagen del arcade, creamos la iamgen de nuestro cursor personalizado
         SCREEN.blit(arcade_menu,(0,0))
         SCREEN.blit(scale(load(join(f_coin,f'Coin_{coin}.png')).convert_alpha(),(220,150)),(370,855))
 
         x_mov -= 5
-        fps_control += 1
+        fps_control += 0.5
 
         if fps_control % 6 == 0:
             coin += 1
@@ -189,11 +192,11 @@ def vehicle_select(): # Funcion para mostrar pantalla de selccion de vehiculo
         if x_move < W:
             SCREEN.blit(background_car,(x_move,72))
         SCREEN.blit(img_cars,(0,0))
-        print_buttons(SCREEN,button_back,'BACK',menu_font)
-        print_buttons(SCREEN,button_car1,'SELECT',car_font)
-        print_buttons(SCREEN,button_car2,'SELECT',car_font)
-        print_buttons(SCREEN,button_car3,'SELECT',car_font)
-        print_buttons(SCREEN,button_car4,'SELECT',car_font)
+        print_buttons(button_back,'BACK',menu_font)
+        print_buttons(button_car1,'SELECT',car_font)
+        print_buttons(button_car2,'SELECT',car_font)
+        print_buttons(button_car3,'SELECT',car_font)
+        print_buttons(button_car4,'SELECT',car_font)
         SCREEN.blit(img_cursor,(mouse_pos[0],mouse_pos[1]))
         SCREEN.blit(arcade_menu,(0,0))
         SCREEN.blit(scale(load(join(f_coin,f'Coin_{coin}.png')).convert_alpha(),(220,150)),(370,855))
@@ -213,8 +216,11 @@ def high_score(): # Funcion para mostrar el puntaje mas alto logrado
     hs = True
     coin = 1                                 
     x_mov = 0
-    fps_control = 0 
-    button_back = Rect(400,690,192,42) 
+    fps_control1 = 0 
+    fps_control2 = 0
+    bongo = 1
+    button_back = Rect(400,690,192,42)
+    cat = Rect(710,160,100,100) 
     while hs:
         CLOCK.tick(60)
         mouse_pos = mouse.get_pos()
@@ -224,33 +230,48 @@ def high_score(): # Funcion para mostrar el puntaje mas alto logrado
                 if button_back.collidepoint(mouse.get_pos()):
                     sfx_button_click.play()
                     hs = False
+                if cat.collidepoint(mouse.get_pos()):
+                    sfx_perseo.play()
 
+        print_buttons(cat,':3',menu_font)
         x_move = x_mov % background_h_s.get_rect().width
         SCREEN.blit(background_h_s,( (x_move - background_h_s.get_rect().width),70 ))
         if x_move < W:
             SCREEN.blit(background_h_s,(x_move,70))
 
-        print_buttons(SCREEN,button_back,'BACK',menu_font)
+        SCREEN.blit(img_hs,(0,0))
+        print_buttons(button_back,'BACK',menu_font)
+        SCREEN.blit(scale(load(join(f_vfx,f'Bongo_Cat_{bongo}.png')).convert_alpha(),(198,198)),(650,110))
         SCREEN.blit(img_cursor,(mouse_pos[0],mouse_pos[1]))
         SCREEN.blit(arcade_menu,(0,0))
         SCREEN.blit(scale(load(join(f_coin,f'Coin_{coin}.png')).convert_alpha(),(220,150)),(370,855))
 
         x_mov -= 5
-        fps_control += 1
+        fps_control1 += 0.5
+        fps_control2 += 2
 
-        if fps_control % 6 == 0:
+        if fps_control2 % 10 == 0:
+            bongo += 1
+        if bongo == 21:
+            bongo = 1
+
+        if fps_control1 % 6 == 0:
             coin += 1
         if coin > 6:
             coin = 1
-            fps_control = 0  
+            fps_control1 = 0  
         display.update()
 
 def how_to_play(): # Funcion para mostrar la guia de como jugar y los controles
     htp = True
-    coin = 1                                 
+    coin = 1                               
     x_mov = 0
-    fps_control = 0 
-    button_back = Rect(400,690,192,42) 
+    fps_control = 0
+    button_back = Rect(630,670,192,42)
+    bonus_1 = Rect(210,580,50,70) 
+    bonus_2 = Rect(330,580,50,70) 
+    bonus_3 = Rect(460,580,50,70) 
+    fuel = Rect(330,440,50,50)  
     while htp:
         CLOCK.tick(60)
         mouse_pos = mouse.get_pos()
@@ -260,19 +281,31 @@ def how_to_play(): # Funcion para mostrar la guia de como jugar y los controles
                 if button_back.collidepoint(mouse.get_pos()):
                     sfx_button_click.play()
                     htp = False
+                if bonus_1.collidepoint(mouse.get_pos()):
+                    sfx_blood_porky.play()
+                if bonus_2.collidepoint(mouse.get_pos()):
+                    sfx_blood_oldwoman.play()
+                if bonus_3.collidepoint(mouse.get_pos()):
+                    sfx_blood_tombos.play()
+                if fuel.collidepoint(mouse.get_pos()):
+                    sfx_powerup.play()
 
+        print_buttons(bonus_1,'1',menu_font)
+        print_buttons(bonus_2,'2',menu_font)
+        print_buttons(bonus_3,'3',menu_font)
+        print_buttons(fuel,'F',menu_font)
         x_move = x_mov % background_ht_play.get_rect().width
         SCREEN.blit(background_ht_play,( (x_move - background_ht_play.get_rect().width),70 ))
         if x_move < W:
             SCREEN.blit(background_ht_play,(x_move,70))
-
-        print_buttons(SCREEN,button_back,'BACK',menu_font)
+        SCREEN.blit(img_htp,(0,0))
+        print_buttons(button_back,'BACK',menu_font)
         SCREEN.blit(img_cursor,(mouse_pos[0],mouse_pos[1]))
         SCREEN.blit(arcade_menu,(0,0))
         SCREEN.blit(scale(load(join(f_coin,f'Coin_{coin}.png')).convert_alpha(),(220,150)),(370,855))
 
         x_mov -= 5
-        fps_control += 1
+        fps_control += 0.5
 
         if fps_control % 6 == 0:
             coin += 1
@@ -283,12 +316,16 @@ def how_to_play(): # Funcion para mostrar la guia de como jugar y los controles
 
 def credits(): # Funcion para mostrar los creditos del juego
     music.load(join(f_music,'Credits_Music.ogg'))
+    music.set_volume(0.4)
     music.play(loops=-1)
     credit = True
-    coin = 1                                  
-    x_mov = 0
-    fps_control = 0 
-    button_back = Rect(400,690,192,42) 
+    coin = 1
+    image = 1                                  
+    y_mov = 0
+    fps_control = 0
+    fps_contro2 = 0 
+    button_back = Rect(400,690,192,42)
+    cat = Rect(850,500,100,100)  
     while credit:
         CLOCK.tick(60)
         mouse_pos = mouse.get_pos()
@@ -298,19 +335,29 @@ def credits(): # Funcion para mostrar los creditos del juego
                 if button_back.collidepoint(mouse.get_pos()):
                     sfx_button_click.play()
                     credit = False
-
-        x_move = x_mov % background_credits.get_rect().width
-        SCREEN.blit(background_credits,( (x_move - background_credits.get_rect().width),70 ))
-        if x_move < W:
-            SCREEN.blit(background_credits,(x_move,70))
-
-        print_buttons(SCREEN,button_back,'BACK',menu_font)
+                if cat.collidepoint(mouse.get_pos()):
+                    sfx_perseo.play()
+                    
+        print_buttons(cat,':3',menu_font)
+        SCREEN.blit(scale(load(join(f_backgrounds,f'Credits_{image}.png')).convert_alpha(),(1040,701)),(0,80))
+        y_move = y_mov % img_credits.get_rect().height
+        SCREEN.blit(img_credits,(0, (y_move - img_credits.get_rect().height) ))
+        if y_move < H:
+            SCREEN.blit(img_credits,(0,y_move))
+        SCREEN.blit(scale(load(join(f_backgrounds,f'CreditsT_{image}.png')).convert_alpha(),(1040,701)),(0,80))
+        print_buttons(button_back,'BACK',menu_font)
         SCREEN.blit(img_cursor,(mouse_pos[0],mouse_pos[1]))
         SCREEN.blit(arcade_menu,(0,0))
         SCREEN.blit(scale(load(join(f_coin,f'Coin_{coin}.png')).convert_alpha(),(220,150)),(370,855))
 
-        x_mov -= 5
-        fps_control += 1
+        y_mov -= 0.75
+        fps_control += 0.5
+        fps_contro2 += 1
+
+        if fps_contro2 % 8 == 0:
+            image += 1
+        if image == 9:
+            image = 1
 
         if fps_control % 6 == 0:
             coin += 1
