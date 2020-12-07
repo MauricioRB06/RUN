@@ -68,7 +68,7 @@ def game_loop(car): # Blucle del juego
 	music.play(loops=-1)  
 	sfx_low_fuel.set_volume(0.05) # El metodo set_volume() nos ayuda a reducir o aumentar el volumen de los sonidos, entre 0 y 1
 	score = 0                     # Iniciamos el puntaje en 0
-	remaining_fuel= 219           # Creamos la cantidad inicial de combustible que tendra el jugador
+	remaining_fuel= 5           # Creamos la cantidad inicial de combustible que tendra el jugador
 	mov_y = 0                     # Variable para mover el fondo ( la imagen del mapa en este caso )
 
 	while game:
@@ -97,15 +97,16 @@ def game_loop(car): # Blucle del juego
 		if y_move < H:                                                           # si la imagen llega hasta el final de la pantalla
 			SCREEN.blit(game_map1_1,(0,y_move))                                  # se imprime de nuevo, en la posicion original creando asi el bucle infinito de movimiento
 
-		'''colision = pygame.sprite.spritecollide(player,enemies,False) # creamos la variable colision que sera True si se cumplen las condiciones
+		colision = pygame.sprite.spritecollide(player,enemies,False) # creamos la variable colision que sera True si se cumplen las condiciones
 		if colision:   # Si se produce la colision entre el sprite del jugador y un sprite del grupo enemigos, llamamos a la animacion busted y a la funcion game_over
 			sfx_low_fuel.stop() 
 			crash(game_map1_1,(0, (y_move - game_map1_1.get_rect().height)-15 ),game_map1_2,(0, (y_move - game_map1_2.get_rect().height)-15 ),players,enemies,police_siren,player.rect.x,player.rect.y)
 			game_over(0,score)
-			game = False # despues de salir de la animacion y "menu" de game_over se pone game en false para salir del bucle while del juego'''
+			game = False # despues de salir de la animacion y "menu" de game_over se pone game en false para salir del bucle while del juego
 			
 		if remaining_fuel <= 0:  # Si la gasolina es  igual o menor 0, llamamos a la animacion busted y a la funcion game_over
 			music.stop()
+			sfx_low_fuel.stop() 
 			busted(game_map1_1,(0, (y_move - game_map1_1.get_rect().height)-15 ),game_map1_2,(0, (y_move - game_map1_2.get_rect().height)-15 ),players,enemies,police_siren)
 			game_over(1,score)
 			game = False
@@ -167,13 +168,13 @@ def game_loop(car): # Blucle del juego
 		bonus.draw(SCREEN)
 		kill_animation.draw(SCREEN)
 		police_siren.draw(SCREEN)
+		score_goal.draw(SCREEN)
 		
 		y_move = mov_y % game_map1_2.get_rect().height
 		SCREEN.blit(game_map1_2,(0, (y_move - game_map1_2.get_rect().height) ))
 		if y_move < H:
 			SCREEN.blit(game_map1_2,(0,y_move))
 		SCREEN.blit(arcade_game,(0,0))
-		score_goal.draw(SCREEN)
 		if remaining_fuel > 1 and remaining_fuel <=70:                             # Si la gasolina es menor a 70
 			music.set_volume(0.3)                                                  # Bajamos el volumen de la musica
 			sfx_low_fuel.play()                                                    # reproducimos el sonido de alerta de poca gasolina

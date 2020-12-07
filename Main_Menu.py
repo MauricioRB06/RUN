@@ -51,7 +51,6 @@ def print_buttons(button,name,font):  # Funcion para imprimir en pantalla los bo
         SCREEN.blit(text,(button.x + (button.width + 10 - text.get_width())/2,  # pintamos el texto en el centro del recuadro del boton
                       button.y + (button.height - 3 - text.get_height())/2 )) 
     else:                                                     # si el mouse no esta encima del boton
-        draw.rect(SCREEN,(255,0,0),button,0)
         text = font.render(name.lower(),True,(245,245,245))   # ponemos la letra de color blanco y minuscula
         SCREEN.blit(text,(button.x + (button.width + 10 - text.get_width())/2, 
                       button.y + (button.height - 3 - text.get_height())/2 )) # pintamos el texto en el centro del recuadro del boton
@@ -67,7 +66,7 @@ def main_menu():  # Funcion del menu principal
     x_mov = 0
     fps_control = 0                           # variable para controlar la velocidad de la animacion insert_coin
     music.load(join(f_music,'Menu_Music.ogg'))
-    music.set_volume(0.4)
+    music.set_volume(0.3)
     music.play(loops=-1)
 
     while game_on:
@@ -85,7 +84,7 @@ def main_menu():  # Funcion del menu principal
                         result = Game_Loop.game_loop(select)
                         load_game()
                         music.load(join(f_music,'Menu_Music.ogg'))
-                        music.set_volume(0.4)
+                        music.set_volume(0.3)
                         music.play(loops=-1)
                         print(result)# print de prueba 
                 if button_hs.collidepoint(mouse.get_pos()):          # revisa si el click colisiono con el boton high score
@@ -157,10 +156,10 @@ def vehicle_select(): # Funcion para mostrar pantalla de selccion de vehiculo
     x_mov = 0
     fps_control = 0 
     button_back = Rect(400,690,192,42)
-    button_car1 = Rect(80,600,192,42) 
-    button_car2 = Rect(290,600,192,42) 
-    button_car3 = Rect(510,600,192,42) 
-    button_car4 = Rect(720,600,192,42)  
+    button_car1 = Rect(80,600,170,30) 
+    button_car2 = Rect(290,600,170,30) 
+    button_car3 = Rect(510,600,170,30) 
+    button_car4 = Rect(720,600,170,30)  
     while select:
         CLOCK.tick(60)
         mouse_pos = mouse.get_pos()
@@ -316,7 +315,7 @@ def how_to_play(): # Funcion para mostrar la guia de como jugar y los controles
 
 def credits(): # Funcion para mostrar los creditos del juego
     music.load(join(f_music,'Credits_Music.ogg'))
-    music.set_volume(0.4)
+    music.set_volume(0.5)
     music.play(loops=-1)
     credit = True
     coin = 1

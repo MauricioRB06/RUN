@@ -96,7 +96,6 @@ def crash(exp_b1,b1_pos,exp_b2,b2_pos,player,enemies,siren,p_x,p_y): # Funcion p
 def busted(exp_b1,b1_pos,exp_b2,b2_pos,player,enemies,siren): # Funcion para animación al ser capturado por quedar sin gasolina
 	music.stop()
 	busted = True
-	fps_6 = 0
 	sfx_busted.play()
 	while busted:
 		CLOCK.tick(8)
@@ -105,16 +104,13 @@ def busted(exp_b1,b1_pos,exp_b2,b2_pos,player,enemies,siren): # Funcion para ani
 		SCREEN.blit(exp_b1,(b1_pos))	
 		player.draw(SCREEN)		
 		enemies.draw(SCREEN)
-		SCREEN.blit(load(join(f_vfx,f'explosion_{fps_6}.png')).convert_alpha(),(500,500)) # IMAGEN PROVICIONAL !!!
 		SCREEN.blit(exp_b2,(b2_pos))
 		siren.draw(SCREEN)
 		SCREEN.blit(img_busted,(0,0))	
 		SCREEN.blit(arcade_lose,(0,0))		
 		display.update()
-		fps_6 +=1
-		if fps_6 == 7:
-			busted = False
-		sleep(6)
+		sleep(7)
+		busted = False
 
 def game_over(why,score): # Funcion para llamar a la animacion y "menu" game over al terminar la partida
 	g_over = True
