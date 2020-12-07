@@ -31,16 +31,16 @@ from pygame.font import Font
 from os.path import join
 from time import sleep
 from random import randint
-from Directorys_Settings import SCREEN, CLOCK, FPS, W, H, f_music, f_coin, sfx_button_click, img_cars, arcade_menu, img_cursor, img_credits, f_backgrounds, sfx_perseo, sfx_blood_tombos, sfx_powerup
-from Directorys_Settings import background_menu, background_load, arcade_game,img_load, background_car, background_h_s,background_ht_play, img_htp, sfx_blood_oldwoman, sfx_blood_porky, img_hs, f_vfx
+from Directorys_Settings import SCREEN,CLOCK,FPS,W,H,f_music,f_coin,sfx_button_click,img_cars,arcade_menu,img_cursor,img_credits,f_backgrounds,sfx_perseo,sfx_blood_tombos,sfx_powerup,game_folder
+from Directorys_Settings import background_menu,background_load,arcade_game,img_load,background_car,background_h_s,background_ht_play,img_htp,sfx_blood_oldwoman,sfx_blood_porky,img_hs,f_vfx
 from Game_functions import hg_score, score_print, order_score
 import Game_Loop  # Importamos el módulo [ Game_Loop ]
 
 # ----------------------------------------- Inicializar Pygame y Pygame Mixer ------------------------------------------------------------------------------------
 pygame.init()
 pygame.mixer.init()
-menu_font = Font('04B30.ttf', 60)
-car_font = Font('04B30.ttf', 35)
+menu_font = Font(join(game_folder,'04B30.ttf'), 60)
+car_font = Font(join(game_folder,'04B30.ttf'), 35)
 mouse.set_visible(0) # El metodo .set_visible() nos permite esconder el cursor de windows dentro de la ventana 0 = False / 1 = True
 game_on = True
 sfx_button_click.set_volume(0.5)

@@ -31,7 +31,7 @@ from pygame import display
 from os.path import join
 from time import sleep # Importamos las funciones que usaremos del módulo [ time ]
 from sys import exit   # Importamos las funciones que usaremos del módulo [ sys ]
-from Directorys_Settings import SCREEN,FPS,CLOCK,W,H,f_music,f_gameover,f_vfx,sfx_crash,sfx_busted
+from Directorys_Settings import SCREEN,FPS,CLOCK,W,H,f_music,f_gameover,f_vfx,sfx_crash,sfx_busted,game_folder
 from Directorys_Settings import arcade_pause,arcade_game_over,arcade_lose,img_pause,img_busted,img_crash,img_go_0,img_go_1,background_go
 
 # En este caso no deseamos pre-cargar muchas de la imagenes que aqui salen, ya que con cada actualizacion estas cambian, para simular animación, asi que se decicio por cargarlas en tiempo real
@@ -39,7 +39,7 @@ from Directorys_Settings import arcade_pause,arcade_game_over,arcade_lose,img_pa
 # ----------------------------------------- Funciones = Imprimir texto / Pausar / Choque / Arresto / Game_Over -----------------------------------------
 
 def score_print(score,x,y,color,size): # Funcion para imprimir la puntuación en pantalla
-	score_font = Font('04B30.ttf', size)          # Creamos un objeto de la clase Font() que usaremos como fuente para imprimirla en pantalla, usamos el archivo .ttf ubicado en la carpeta raiz y un tamaño
+	score_font = Font(join(game_folder,'04B30.ttf'), size)          # Creamos un objeto de la clase Font() que usaremos como fuente para imprimirla en pantalla, usamos el archivo .ttf ubicado en la carpeta raiz y un tamaño
 	surface = score_font.render(score,True,color) # Creamos una superficie para poner el texto y mostrarlo en pantalla, especificamos el texto, True para usar anti-aliased y el color del texto
 	size_text = surface.get_rect()                # Creamos el rectangulo en base al tamaño final de la superficie ( que cambiara cada vez que cambie el texto )
 	size_text.center = (x,y)                      # Centramos el rectangulo en la posicion deseada de la pantalla
