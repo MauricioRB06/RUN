@@ -4,10 +4,10 @@
 # 													  #
 #           Final Project Computer Programming        #
 #                                                     #
-#       National university of Colombia - 2020 II     #
-#           Teacher: Juan Diego Escobar Mejia         #
+#      National university of Colombia - 2020 II      #
+#          Teacher: Juan Diego Escobar Mejia          #
 #                                                     #
-# 			     Language:  Python 3.9		     	  #
+#                Language:  Python 3.9                #
 #                                                     #
 #                     Programmers:                    #
 # 													  #
