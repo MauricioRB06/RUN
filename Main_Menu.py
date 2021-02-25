@@ -1,383 +1,398 @@
-# # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# 													  #
-# 				    Proyecto R.U.N	                  #
-# 													  #
-#	   Proyecto Final Pogramacion de Computadores     #
-#													  #
-#	   Universidad Nacional de Colombia - 2020 II     #
-#	       Docente: Juan Diego Escobar Mejia          #
-#	                      						      #
-# 			       Lenguaje:  Python		     	  #
-#	                      						      #
-#	                 Programadores:   			      #
-# 													  #
-#	 Mauricio Rodriguez Becerra  - Ing. Mecatronica   #
-#	 Laura Alejandra Paez Daza   - Ing. Mecatronica   #
-#	 Juan Esteban Flechas Rincon - Ing. Electronica   #
-#	 Alejandro Mendivelso Torres - Ing. Mecatronica   #
-#												      #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # #
-
+# R.U.N Project - File 4
 # Pygame [ https://www.pygame.org/docs/ ]
 # OS [ https://docs.python.org/3/library/os.html ]
 # TIME [ https://docs.python.org/3/library/time.html ]
 
-import pygame
-from pygame import Rect, draw, mouse, display, MOUSEBUTTONDOWN
-from pygame.image import load
-from pygame.mixer import Sound, music
-from pygame.transform import scale
-from pygame.font import Font
 from os.path import join
 from time import sleep
-from random import randint
-from Directorys_Settings import SCREEN,CLOCK,FPS,W,H,f_music,f_coin,sfx_button_click,img_cars,arcade_menu,img_cursor,img_credits,f_backgrounds,sfx_perseo,sfx_blood_tombos,sfx_powerup,game_folder
-from Directorys_Settings import background_menu,background_load,arcade_game,img_load,background_car,background_h_s,background_ht_play,img_htp,sfx_blood_oldwoman,sfx_blood_porky,img_hs,f_vfx
-from Game_functions import hg_score, score_print, order_score
-import Game_Loop  # Importamos el módulo [ Game_Loop ]
 
-# ----------------------------------------- Inicializar Pygame y Pygame Mixer ------------------------------------------------------------------------------------
+import pygame
+from pygame import Rect, mouse, display, MOUSEBUTTONDOWN
+from pygame.font import Font
+from pygame.image import load
+from pygame.mixer import music
+from pygame.transform import scale
+
+import Game_Loop
+from Directorys_Settings import SCREEN, CLOCK, Width, Height, f_music, f_coin, \
+    sfxButtonClick, imgCars, bgArcadeMenu, imgCursor, imgCredits, f_backgrounds, \
+    sfxCat, sfxBloodPolice, sfxPowerUp, game_folder
+
+from Directorys_Settings import bgMenu, bgLoading, bgArcadeGame, imgLoad, \
+    bgVehicleSelection, bgHighScores, bgHowToPlay, imgHowToPlay, sfxBloodOldWoman, \
+    sfxBloodPorky, imgHighScore, f_vfx
+
+from Game_Functions import ScorePrint, ScoreOrder, HighScore
+
 pygame.init()
 pygame.mixer.init()
-menu_font = Font(join(game_folder,'04B30.ttf'), 60)
-car_font = Font(join(game_folder,'04B30.ttf'), 35)
-mouse.set_visible(0) # El metodo .set_visible() nos permite esconder el cursor de windows dentro de la ventana 0 = False / 1 = True
+menuFont = Font(join(game_folder, '04B30.ttf'), 60)
+carFont = Font(join(game_folder, '04B30.ttf'), 35)
+mouse.set_visible(False)
 game_on = True
-sfx_button_click.set_volume(0.5)
-# --------------------------- Funciones = cargar juego/ seleccionar auto / puntuacion mas alta / como jugar / creditos / menu principal / imprimir botones -------
+sfxButtonClick.set_volume(0.5)
 
-def print_buttons(button,name,font):  # Funcion para imprimir en pantalla los botones
-    if button.collidepoint(mouse.get_pos()):           # si el mouse esta encima del boton
-        text = font.render(name,True,(235,47,47)) # ponemos la letra de color rojo y mayuscula
-        SCREEN.blit(text,(button.x + (button.width + 10 - text.get_width())/2,  # pintamos el texto en el centro del recuadro del boton
-                      button.y + (button.height - 3 - text.get_height())/2 )) 
-    else:                                                     # si el mouse no esta encima del boton
-        text = font.render(name.lower(),True,(245,245,245))   # ponemos la letra de color blanco y minuscula
-        SCREEN.blit(text,(button.x + (button.width + 10 - text.get_width())/2, 
-                      button.y + (button.height - 3 - text.get_height())/2 )) # pintamos el texto en el centro del recuadro del boton
 
-def main_menu():  # Funcion del menu principal
+def ButtonsPrint(button, name, font):
+    if button.collidepoint(mouse.get_pos()):
+        text = font.render(name, True, (235, 47, 47))
+        SCREEN.blit(text, (button.x + (button.width + 10 - text.get_width()) / 2,
+                           button.y + (button.height - 3 - text.get_height()) / 2))
+    else:
+        text = font.render(name.lower(), True, (245, 245, 245))
+        SCREEN.blit(text, (button.x + (button.width + 10 - text.get_width()) / 2,
+                           button.y + (button.height - 3 - text.get_height()) / 2))
 
-    button_play = Rect((W//4),200,192,42)     # Creamos un rectangulo ingresando la posicion (x,y) y luego el tamaño (ancho,alto) que simulara un boton
-    button_hs = Rect((W//4),305,470,42)
-    button_htp = Rect((W//4),410,540,42)
-    button_credits = Rect((W//4),515,320,42)
-    button_exit = Rect((W//4),620,175,42)
-    coin = 1                                  # variable para animar el insert_coin
+
+def MainMenu():
+    button_play = Rect((Width // 4), 200, 192, 42)
+    button_high_score = Rect((Width // 4), 305, 470, 42)
+    button_how_to_play = Rect((Width // 4), 410, 540, 42)
+    button_credits = Rect((Width // 4), 515, 320, 42)
+    button_exit = Rect((Width // 4), 620, 175, 42)
+    coin_animation = 1
+    coin_animation_control = 0
     x_mov = 0
-    fps_control = 0                           # variable para controlar la velocidad de la animacion insert_coin
-    music.load(join(f_music,'Menu_Music.ogg'))
+    music.load(join(f_music, 'Menu_Music.ogg'))
     music.set_volume(0.15)
     music.play(loops=-1)
 
     while game_on:
         CLOCK.tick(Game_Loop.FPS)
-        mouse_pos = mouse.get_pos() # El metodo .get_pos() nos devuelve una tupla con la posicion (x,y) del mouse en la pantalla
+        mouse_pos = mouse.get_pos()
         for event in pygame.event.get():
-            if event.type == pygame.QUIT: pygame.quit(); quit
-            if event.type == MOUSEBUTTONDOWN and event.button == 1:  # si el evento es de tipo presionar boton de mouse procedemos a revisar
-                if button_play.collidepoint(mouse.get_pos()):        # el metodo .collidepoint() nos permite saber si un punto (x,y) en este caso la posicion del mouse
-                    sfx_button_click.play()                          # colisiono con el rectangulo que representa al boton play en este caso y si es asi, desencadena el if
-                    select = vehicle_select()
-                    if select != 0:
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            if event.type == MOUSEBUTTONDOWN and event.button == 1:
+                if button_play.collidepoint(mouse.get_pos()):
+                    sfxButtonClick.play()
+                    selection = VehicleSelectMenu()
+                    if selection != 0:
                         sleep(1)
-                        load_game()
-                        final_score = Game_Loop.game_loop(select)
-                        load_game()
-                        music.load(join(f_music,'Menu_Music.ogg'))
+                        LoadGameScreen()
+                        final_score = Game_Loop.GameLoop(selection)
+                        LoadGameScreen()
+                        music.load(join(f_music, 'Menu_Music.ogg'))
                         music.set_volume(0.15)
                         music.play(loops=-1)
-                        save = open('High_Scores.user','a')
-                        save.write(str(final_score)+'\n')
+                        save = open('High_Scores.user', 'a')
+                        save.write(str(final_score) + '\n')
                         save.close()
-                if button_hs.collidepoint(mouse.get_pos()):          # revisa si el click colisiono con el boton high score
-                    sfx_button_click.play()
-                    high_score()                                     # llamamos a la funcion con el menu High Score                     
-                if button_htp.collidepoint(mouse.get_pos()):         # revisa si el click colisiono con el boton
-                    sfx_button_click.play()
-                    how_to_play()                                    # llamamos a la funcion con el menu How To Play
-                if button_credits.collidepoint(mouse.get_pos()):     # revisa si el click colisiono con el boton
-                    sfx_button_click.play()
+                if button_high_score.collidepoint(mouse.get_pos()):
+                    sfxButtonClick.play()
+                    HighScoreMenu()
+                if button_how_to_play.collidepoint(mouse.get_pos()):
+                    sfxButtonClick.play()
+                    HowToPlayMenu()
+                if button_credits.collidepoint(mouse.get_pos()):
+                    sfxButtonClick.play()
                     music.stop()
-                    credits()
-                    music.load(join(f_music,'Menu_Music.ogg'))
+                    CreditsMenu()
+                    music.load(join(f_music, 'Menu_Music.ogg'))
                     music.set_volume(0.15)
-                    music.play(loops=-1)                                        # llamamos a la funcion con el menu Credits
-                if button_exit.collidepoint(mouse.get_pos()):        # revisa si el click colisiono con el boton salir y cierra el sistema
-                    sfx_button_click.play()
+                    music.play(loops=-1)
+                if button_exit.collidepoint(
+                        mouse.get_pos()):
+                    sfxButtonClick.play()
                     sleep(1)
                     exit()
 
-        x_move = x_mov % background_menu.get_rect().width
-        SCREEN.blit(background_menu,( (x_move - background_menu.get_rect().width),70 ))
-        if x_move < W:
-            SCREEN.blit(background_menu,(x_move,70))
+        x_move = x_mov % bgMenu.get_rect().width
+        SCREEN.blit(bgMenu, ((x_move - bgMenu.get_rect().width), 70))
+        if x_move < Width:
+            SCREEN.blit(bgMenu, (x_move, 70))
 
-        print_buttons(button_play,'PLAY',menu_font)         # Llamamos a la función print_buttons y le damos de parametro el rectangulo del boton correspondiente, y el texto que tendra el boton
-        print_buttons(button_hs,'HIGH SCORE',menu_font)
-        print_buttons(button_htp,'HOW TO PLAY',menu_font)
-        print_buttons(button_credits,'CREDITS',menu_font)
-        print_buttons(button_exit,'EXIT',menu_font)
+        ButtonsPrint(button_play, 'PLAY', menuFont)
+        ButtonsPrint(button_high_score, 'HIGH SCORE', menuFont)
+        ButtonsPrint(button_how_to_play, 'HOW TO PLAY', menuFont)
+        ButtonsPrint(button_credits, 'CREDITS', menuFont)
+        ButtonsPrint(button_exit, 'EXIT', menuFont)
 
-        SCREEN.blit(img_cursor,(mouse_pos[0],mouse_pos[1])) # Despues de que se creen las imagenes y justo abajo de la imagen del arcade, creamos la iamgen de nuestro cursor personalizado
-        SCREEN.blit(arcade_menu,(0,0))
-        SCREEN.blit(scale(load(join(f_coin,f'Coin_{coin}.png')).convert_alpha(),(220,150)),(370,855))
+        SCREEN.blit(imgCursor, (mouse_pos[0], mouse_pos[1]))
+        SCREEN.blit(bgArcadeMenu, (0, 0))
+        SCREEN.blit(scale(load(join(f_coin, f'Coin_{coin_animation}.png'))
+                          .convert_alpha(), (220, 150)), (370, 855))
 
         x_mov -= 5
-        fps_control += 0.5
+        coin_animation_control += 0.5
 
-        if fps_control % 6 == 0:
-            coin += 1
-        if coin > 6:
-            coin = 1
-            fps_control = 0
+        if coin_animation_control % 6 == 0:
+            coin_animation += 1
+        if coin_animation > 6:
+            coin_animation = 1
+            coin_animation_control = 0
 
         display.update()
 
-def load_game():  # Funcion para mostrar animacion de carga del juego
+
+def LoadGameScreen():
     music.stop()
     load_bar = 0
-    load = True
-    while load:
+    loading = True
+
+    while loading:
         CLOCK.tick(144)
         for event in pygame.event.get():
-            if event.type == pygame.QUIT: exit()
+            if event.type == pygame.QUIT:
+                exit()
 
-        SCREEN.blit(background_load,(-240,0))
-        SCREEN.blit(img_load,(0,0))
-        pygame.draw.rect(SCREEN,(35,100,198),(185, 552, load_bar, 36))        
-        SCREEN.blit(arcade_game,(0,0))   
+        SCREEN.blit(bgLoading, (-240, 0))
+        SCREEN.blit(imgLoad, (0, 0))
+        pygame.draw.rect(SCREEN, (35, 100, 198), (185, 552, load_bar, 36))
+        SCREEN.blit(bgArcadeGame, (0, 0))
         load_bar += 2
         display.update()
         if load_bar >= 632:
-            load = False
-    sleep(2)					  
+            loading = False
+    sleep(2)
 
-def vehicle_select(): # Funcion para mostrar pantalla de selccion de vehiculo
-    select = True
-    vechicle = 0
-    coin = 1                                  
+
+def VehicleSelectMenu():
+    selection = True
+    vehicle = 0
+    coin_animation = 1
+    coin_animation_control = 0
     x_mov = 0
-    fps_control = 0 
-    button_back = Rect(400,690,192,42)
-    button_car1 = Rect(100,600,170,30) 
-    button_car2 = Rect(310,600,170,30) 
-    button_car3 = Rect(520,600,170,30) 
-    button_car4 = Rect(730,600,170,30)  
-    while select:
+    button_back = Rect(400, 690, 192, 42)
+    button_car1 = Rect(100, 600, 170, 30)
+    button_car2 = Rect(310, 600, 170, 30)
+    button_car3 = Rect(520, 600, 170, 30)
+    button_car4 = Rect(730, 600, 170, 30)
+
+    while selection:
         CLOCK.tick(60)
         mouse_pos = mouse.get_pos()
         for event in pygame.event.get():
-            if event.type == pygame.QUIT: exit()
-            if event.type == MOUSEBUTTONDOWN and event.button == 1:  
+            if event.type == pygame.QUIT:
+                exit()
+            if event.type == MOUSEBUTTONDOWN and event.button == 1:
                 if button_back.collidepoint(mouse.get_pos()):
-                    sfx_button_click.play()
-                    select = False
+                    sfxButtonClick.play()
+                    selection = False
                 if button_car1.collidepoint(mouse.get_pos()):
-                    sfx_button_click.play()
-                    vechicle = 1
-                    select = False
+                    sfxButtonClick.play()
+                    vehicle = 1
+                    selection = False
                 if button_car2.collidepoint(mouse.get_pos()):
-                    sfx_button_click.play()
-                    vechicle = 2
-                    select = False
+                    sfxButtonClick.play()
+                    vehicle = 2
+                    selection = False
                 if button_car3.collidepoint(mouse.get_pos()):
-                    sfx_button_click.play()
-                    vechicle = 3
-                    select = False
+                    sfxButtonClick.play()
+                    vehicle = 3
+                    selection = False
                 if button_car4.collidepoint(mouse.get_pos()):
-                    sfx_button_click.play()
-                    vechicle = 4
-                    select = False
+                    sfxButtonClick.play()
+                    vehicle = 4
+                    selection = False
 
-        x_move = x_mov % background_car.get_rect().width
-        SCREEN.blit(background_car,( (x_move - background_car.get_rect().width),72 ))
-        if x_move < W:
-            SCREEN.blit(background_car,(x_move,72))
-        SCREEN.blit(img_cars,(0,0))
-        print_buttons(button_back,'BACK',menu_font)
-        print_buttons(button_car1,'SELECT',car_font)
-        print_buttons(button_car2,'SELECT',car_font)
-        print_buttons(button_car3,'SELECT',car_font)
-        print_buttons(button_car4,'SELECT',car_font)
-        SCREEN.blit(img_cursor,(mouse_pos[0],mouse_pos[1]))
-        SCREEN.blit(arcade_menu,(0,0))
-        SCREEN.blit(scale(load(join(f_coin,f'Coin_{coin}.png')).convert_alpha(),(220,150)),(370,855))
+        x_move = x_mov % bgVehicleSelection.get_rect().width
+        SCREEN.blit(bgVehicleSelection,
+                    ((x_move - bgVehicleSelection.get_rect().width), 72))
+        if x_move < Width:
+            SCREEN.blit(bgVehicleSelection, (x_move, 72))
+        SCREEN.blit(imgCars, (0, 0))
+        ButtonsPrint(button_back, 'BACK', menuFont)
+        ButtonsPrint(button_car1, 'SELECT', carFont)
+        ButtonsPrint(button_car2, 'SELECT', carFont)
+        ButtonsPrint(button_car3, 'SELECT', carFont)
+        ButtonsPrint(button_car4, 'SELECT', carFont)
+        SCREEN.blit(imgCursor, (mouse_pos[0], mouse_pos[1]))
+        SCREEN.blit(bgArcadeMenu, (0, 0))
+        SCREEN.blit(scale(load(join(f_coin, f'Coin_{coin_animation}.png'))
+                          .convert_alpha(), (220, 150)), (370, 855))
 
         x_mov -= 5
-        fps_control += 1
+        coin_animation_control += 1
 
-        if fps_control % 6 == 0:
-            coin += 1
-        if coin > 6:
-            coin = 1
-            fps_control = 0  
+        if coin_animation_control % 6 == 0:
+            coin_animation += 1
+        if coin_animation > 6:
+            coin_animation = 1
+            coin_animation_control = 0
         display.update()
-    return vechicle                       
+    return vehicle
 
-def high_score(): # Funcion para mostrar el puntaje mas alto logrado
-    save = open('High_Scores.user','a')
-    order_score()
-    score_1,score_2,score_3 = hg_score()
-    hs = True
-    coin = 1                                 
+
+def HighScoreMenu():
+    scores_file = open('High_Scores.user', 'a')
+    ScoreOrder()
+    score_1, score_2, score_3 = HighScore()
+    check_high_scores = True
     x_mov = 0
-    fps_control1 = 0 
-    fps_control2 = 0
-    bongo = 1
-    button_back = Rect(400,690,192,42)
-    cat = Rect(710,160,100,100) 
-    while hs:
+    coin_animation = 1
+    coin_animation_control = 0
+    bongo_cat_animation = 1
+    bongo_cat_animation_control = 0
+    button_back = Rect(400, 690, 192, 42)
+    button_cat_sound = Rect(710, 160, 100, 100)
+
+    while check_high_scores:
         CLOCK.tick(60)
         mouse_pos = mouse.get_pos()
         for event in pygame.event.get():
-            if event.type == pygame.QUIT: exit()
-            if event.type == MOUSEBUTTONDOWN and event.button == 1:  
+            if event.type == pygame.QUIT:
+                exit()
+            if event.type == MOUSEBUTTONDOWN and event.button == 1:
                 if button_back.collidepoint(mouse.get_pos()):
-                    sfx_button_click.play()
-                    hs = False
-                if cat.collidepoint(mouse.get_pos()):
-                    sfx_perseo.play()
+                    sfxButtonClick.play()
+                    check_high_scores = False
+                if button_cat_sound.collidepoint(mouse.get_pos()):
+                    sfxCat.play()
 
-        print_buttons(cat,':3',menu_font)
-        x_move = x_mov % background_h_s.get_rect().width
-        SCREEN.blit(background_h_s,( (x_move - background_h_s.get_rect().width),70 ))
-        if x_move < W:
-            SCREEN.blit(background_h_s,(x_move,70))
+        ButtonsPrint(button_cat_sound, ':3', menuFont)
+        x_move = x_mov % bgHighScores.get_rect().width
+        SCREEN.blit(bgHighScores, ((x_move - bgHighScores.get_rect().width), 70))
+        if x_move < Width:
+            SCREEN.blit(bgHighScores, (x_move, 70))
 
-        SCREEN.blit(img_hs,(0,0))
-        print_buttons(button_back,'BACK',menu_font)
-        score_print(score_1.zfill(10),650,379,(0,0,0),50)
-        score_print(score_1.zfill(10),650,375,(255,255,255),50)
-        score_print(score_2.zfill(10),650,484,(0,0,0),50)
-        score_print(score_2.zfill(10),650,480,(255,255,255),50)
-        score_print(score_3.zfill(10),650,584,(0,0,0),50)
-        score_print(score_3.zfill(10),650,580,(255,255,255),50)
-        SCREEN.blit(scale(load(join(f_vfx,f'Bongo_Cat_{bongo}.png')).convert_alpha(),(198,198)),(650,110))
-        SCREEN.blit(img_cursor,(mouse_pos[0],mouse_pos[1]))
-        SCREEN.blit(arcade_menu,(0,0))
-        SCREEN.blit(scale(load(join(f_coin,f'Coin_{coin}.png')).convert_alpha(),(220,150)),(370,855))
+        SCREEN.blit(imgHighScore, (0, 0))
+        ButtonsPrint(button_back, 'BACK', menuFont)
+        ScorePrint(score_1.zfill(10), 650, 379, (0, 0, 0), 50)
+        ScorePrint(score_1.zfill(10), 650, 375, (255, 255, 255), 50)
+        ScorePrint(score_2.zfill(10), 650, 484, (0, 0, 0), 50)
+        ScorePrint(score_2.zfill(10), 650, 480, (255, 255, 255), 50)
+        ScorePrint(score_3.zfill(10), 650, 584, (0, 0, 0), 50)
+        ScorePrint(score_3.zfill(10), 650, 580, (255, 255, 255), 50)
+        SCREEN.blit(scale(load(join(f_vfx, f'Bongo_Cat_{bongo_cat_animation}.png'))
+                          .convert_alpha(), (198, 198)), (650, 110))
+        SCREEN.blit(imgCursor, (mouse_pos[0], mouse_pos[1]))
+        SCREEN.blit(bgArcadeMenu, (0, 0))
+        SCREEN.blit(scale(load(join(f_coin, f'Coin_{coin_animation}.png'))
+                          .convert_alpha(), (220, 150)), (370, 855))
 
         x_mov -= 5
-        fps_control1 += 0.5
-        fps_control2 += 2
+        coin_animation_control += 0.5
+        bongo_cat_animation_control += 2
 
-        if fps_control2 % 10 == 0:
-            bongo += 1
-        if bongo == 21:
-            bongo = 1
+        if bongo_cat_animation_control % 10 == 0:
+            bongo_cat_animation += 1
+        if bongo_cat_animation == 21:
+            bongo_cat_animation = 1
 
-        if fps_control1 % 6 == 0:
-            coin += 1
-        if coin > 6:
-            coin = 1
-            fps_control1 = 0  
+        if coin_animation_control % 6 == 0:
+            coin_animation += 1
+        if coin_animation > 6:
+            coin_animation = 1
+            coin_animation_control = 0
         display.update()
-    save.close()
+    scores_file.close()
 
-def how_to_play(): # Funcion para mostrar la guia de como jugar y los controles
-    htp = True
-    coin = 1                               
+
+def HowToPlayMenu():
+    check_how_to_play = True
+    coin_animation = 1
+    coin_animation_control = 0
     x_mov = 0
-    fps_control = 0
-    button_back = Rect(630,670,192,42)
-    bonus_1 = Rect(210,580,50,70) 
-    bonus_2 = Rect(330,580,50,70) 
-    bonus_3 = Rect(460,580,50,70) 
-    fuel = Rect(330,440,50,50)  
-    while htp:
+    button_back = Rect(630, 670, 192, 42)
+    bonus_1_sound = Rect(210, 580, 50, 70)
+    bonus_2_sound = Rect(330, 580, 50, 70)
+    bonus_3_sound = Rect(460, 580, 50, 70)
+    fuel_sound = Rect(330, 440, 50, 50)
+
+    while check_how_to_play:
         CLOCK.tick(60)
         mouse_pos = mouse.get_pos()
         for event in pygame.event.get():
-            if event.type == pygame.QUIT: exit()
-            if event.type == MOUSEBUTTONDOWN and event.button == 1:  
+            if event.type == pygame.QUIT:
+                exit()
+            if event.type == MOUSEBUTTONDOWN and event.button == 1:
                 if button_back.collidepoint(mouse.get_pos()):
-                    sfx_button_click.play()
-                    htp = False
-                if bonus_1.collidepoint(mouse.get_pos()):
-                    sfx_blood_porky.play()
-                if bonus_2.collidepoint(mouse.get_pos()):
-                    sfx_blood_oldwoman.play()
-                if bonus_3.collidepoint(mouse.get_pos()):
-                    sfx_blood_tombos.play()
-                if fuel.collidepoint(mouse.get_pos()):
-                    sfx_powerup.play()
+                    sfxButtonClick.play()
+                    check_how_to_play = False
+                if bonus_1_sound.collidepoint(mouse.get_pos()):
+                    sfxBloodPorky.play()
+                if bonus_2_sound.collidepoint(mouse.get_pos()):
+                    sfxBloodOldWoman.play()
+                if bonus_3_sound.collidepoint(mouse.get_pos()):
+                    sfxBloodPolice.play()
+                if fuel_sound.collidepoint(mouse.get_pos()):
+                    sfxPowerUp.play()
 
-        print_buttons(bonus_1,'1',menu_font)
-        print_buttons(bonus_2,'2',menu_font)
-        print_buttons(bonus_3,'3',menu_font)
-        print_buttons(fuel,'F',menu_font)
-        x_move = x_mov % background_ht_play.get_rect().width
-        SCREEN.blit(background_ht_play,( (x_move - background_ht_play.get_rect().width),70 ))
-        if x_move < W:
-            SCREEN.blit(background_ht_play,(x_move,70))
-        SCREEN.blit(img_htp,(0,0))
-        print_buttons(button_back,'BACK',menu_font)
-        SCREEN.blit(img_cursor,(mouse_pos[0],mouse_pos[1]))
-        SCREEN.blit(arcade_menu,(0,0))
-        SCREEN.blit(scale(load(join(f_coin,f'Coin_{coin}.png')).convert_alpha(),(220,150)),(370,855))
+        ButtonsPrint(bonus_1_sound, '1', menuFont)
+        ButtonsPrint(bonus_2_sound, '2', menuFont)
+        ButtonsPrint(bonus_3_sound, '3', menuFont)
+        ButtonsPrint(fuel_sound, 'F', menuFont)
+        x_move = x_mov % bgHowToPlay.get_rect().width
+        SCREEN.blit(bgHowToPlay, ((x_move - bgHowToPlay.get_rect().width), 70))
+        if x_move < Width:
+            SCREEN.blit(bgHowToPlay, (x_move, 70))
+        SCREEN.blit(imgHowToPlay, (0, 0))
+        ButtonsPrint(button_back, 'BACK', menuFont)
+        SCREEN.blit(imgCursor, (mouse_pos[0], mouse_pos[1]))
+        SCREEN.blit(bgArcadeMenu, (0, 0))
+        SCREEN.blit(scale(load(join(f_coin, f'Coin_{coin_animation}.png'))
+                          .convert_alpha(), (220, 150)), (370, 855))
 
         x_mov -= 5
-        fps_control += 0.5
+        coin_animation_control += 0.5
 
-        if fps_control % 6 == 0:
-            coin += 1
-        if coin > 6:
-            coin = 1
-            fps_control = 0  
+        if coin_animation_control % 6 == 0:
+            coin_animation += 1
+        if coin_animation > 6:
+            coin_animation = 1
+            coin_animation_control = 0
         display.update()
 
-def credits(): # Funcion para mostrar los creditos del juego
-    music.load(join(f_music,'Credits_Music.ogg'))
+
+def CreditsMenu():
+    music.load(join(f_music, 'Credits_Music.ogg'))
     music.set_volume(0.5)
     music.play(loops=-1)
-    credit = True
-    coin = 1
-    image = 1                                  
+    check_credits_menu = True
+    coin_animation = 1
+    coin_animation_control = 0
+    num_image = 1
     y_mov = 0
-    fps_control = 0
-    fps_contro2 = 0 
-    button_back = Rect(400,690,192,42)
-    cat = Rect(850,500,100,100)  
-    while credit:
+    background_animation_control = 0
+    button_back = Rect(400, 690, 192, 42)
+    button_cat_sound = Rect(850, 500, 100, 100)
+    while check_credits_menu:
+
         CLOCK.tick(60)
         mouse_pos = mouse.get_pos()
         for event in pygame.event.get():
-            if event.type == pygame.QUIT: exit()
-            if event.type == MOUSEBUTTONDOWN and event.button == 1:  
+            if event.type == pygame.QUIT:
+                exit()
+            if event.type == MOUSEBUTTONDOWN and event.button == 1:
                 if button_back.collidepoint(mouse.get_pos()):
-                    sfx_button_click.play()
-                    credit = False
-                if cat.collidepoint(mouse.get_pos()):
-                    sfx_perseo.play()
-                    
-        print_buttons(cat,':3',menu_font)
-        SCREEN.blit(scale(load(join(f_backgrounds,f'Credits_{image}.png')).convert_alpha(),(1040,701)),(0,80))
-        y_move = y_mov % img_credits.get_rect().height
-        SCREEN.blit(img_credits,(0, (y_move - img_credits.get_rect().height) ))
-        if y_move < H:
-            SCREEN.blit(img_credits,(0,y_move))
-        SCREEN.blit(scale(load(join(f_backgrounds,f'CreditsT_{image}.png')).convert_alpha(),(1040,701)),(0,80))
-        print_buttons(button_back,'BACK',menu_font)
-        SCREEN.blit(img_cursor,(mouse_pos[0],mouse_pos[1]))
-        SCREEN.blit(arcade_menu,(0,0))
-        SCREEN.blit(scale(load(join(f_coin,f'Coin_{coin}.png')).convert_alpha(),(220,150)),(370,855))
+                    sfxButtonClick.play()
+                    check_credits_menu = False
+                if button_cat_sound.collidepoint(mouse.get_pos()):
+                    sfxCat.play()
+
+        ButtonsPrint(button_cat_sound, ':3', menuFont)
+        SCREEN.blit(scale(load(join(f_backgrounds, f'Credits_{num_image}.png'))
+                          .convert_alpha(), (1040, 701)), (0, 80))
+        y_move = y_mov % imgCredits.get_rect().height
+        SCREEN.blit(imgCredits, (0, (y_move - imgCredits.get_rect().height)))
+        if y_move < Height:
+            SCREEN.blit(imgCredits, (0, y_move))
+        SCREEN.blit(scale(load(join(f_backgrounds, f'CreditsT_{num_image}.png'))
+                          .convert_alpha(), (1040, 701)), (0, 80))
+        ButtonsPrint(button_back, 'BACK', menuFont)
+        SCREEN.blit(imgCursor, (mouse_pos[0], mouse_pos[1]))
+        SCREEN.blit(bgArcadeMenu, (0, 0))
+        SCREEN.blit(scale(load(join(f_coin, f'Coin_{coin_animation}.png'))
+                          .convert_alpha(), (220, 150)), (370, 855))
 
         y_mov -= 0.75
-        fps_control += 0.5
-        fps_contro2 += 1
+        coin_animation_control += 0.5
+        background_animation_control += 1
 
-        if fps_contro2 % 8 == 0:
-            image += 1
-        if image == 9:
-            image = 1
+        if background_animation_control % 8 == 0:
+            num_image += 1
+        if num_image == 9:
+            num_image = 1
 
-        if fps_control % 6 == 0:
-            coin += 1
-        if coin > 6:
-            coin = 1
-            fps_control = 0  
+        if coin_animation_control % 6 == 0:
+            coin_animation += 1
+        if coin_animation > 6:
+            coin_animation = 1
+            coin_animation_control = 0
         display.update()
     music.stop()
 
-main_menu() # Iniciamos la funcion menu principal
+
+MainMenu()
