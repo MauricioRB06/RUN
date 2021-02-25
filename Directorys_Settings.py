@@ -16,11 +16,11 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 # R.U.N Project - File 1
-# This file contains the root directories and files of the project, this
-# reduces the lines of code that we will have to use later, by returning the
-# calls to files and location paths a variable that we can use, The only
-# resources that are not contained within this directory file are the images
-# that we are going to modify at runtime to make animations.
+# This file contains the root directories and files of the project, this reduces the
+# lines of code that we will have to use later, by returning the calls to files and
+# location paths a variable that we can use, The only resources that are not contained
+# within this directory file are the images that we are going to modify at runtime to
+# make animations.
 
 # OS [ https://docs.python.org/3/library/os.html ]
 # Pygame [ https://www.pygame.org/docs/ ]
